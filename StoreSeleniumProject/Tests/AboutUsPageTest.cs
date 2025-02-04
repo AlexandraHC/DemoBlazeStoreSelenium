@@ -2,33 +2,45 @@
 using StoreSeleniumProject.PageObject;
 using StoreSeleniumProject.Tests.Common;
 
-namespace StoreSeleniumProject.Tests
+namespace StoreSeleniumProject.Tests;
+
+[TestFixture(DriverType.Firefox)]
+[TestFixture(DriverType.Chrome)]
+[TestFixture(DriverType.Edge)]
+
+public class AboutUsPageTest : TestBase
 {
-    [TestFixture(DriverType.Firefox)]
-    [TestFixture(DriverType.Chrome)]
-    [TestFixture(DriverType.Edge)]
-
-    public class AboutUsPageTest : TestBase
+    public AboutUsPageTest(DriverType driverType) : base(driverType)
     {
-        public AboutUsPageTest(DriverType driverType) : base(driverType)
-        {
-        }
+    }
 
-        [SetUp]
-        public void SetUp()
-        {
-            base.Setup();
-        }
+    [SetUp]
+    public void SetUp()
+    {
+        base.Setup();
+    }
 
-        [Test]
-        public void AboutUsPopUpTest()
-        {
-            AboutUsPage aboutUs = new AboutUsPage(_driver);
-            aboutUs.NavigateToAboutUsLink();
-            aboutUs.PlayVideoButton();
-            Assert.True(aboutUs.IsVideoStarted());
+    [Test]
+    public void AboutUsPopUpTest()
+    {
+        AboutUsPage aboutUs = new AboutUsPage(_driver);
+        aboutUs.NavigateToAboutUsLink();
+        aboutUs.PlayVideoButton();
+        Assert.True(aboutUs.IsVideoStarted());
 
-            aboutUs.CloseTheAboutUsPopup();
-        }
+        aboutUs.CloseTheAboutUsPopup();
+    }
+
+    [Test]
+    public void TestOpenAndCloseAboutUsPopupFunctionalities()
+    {
+        AboutUsPage aboutUs = new AboutUsPage(_driver);
+        aboutUs.NavigateToAboutUsLink();
+        aboutUs.CloseTheAboutUsPopup();
+
+        // wait for UI to refresh
+        Thread.Sleep(500);
+
+        Assert.False(aboutUs.IsAboutUsPopupVisible());
     }
 }
